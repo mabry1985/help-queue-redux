@@ -8,6 +8,7 @@ function Admin(props){
   if (props.selectedTicket != null){
     optionalSelectedTicketContent =  <TicketDetail selectedTicket={props.ticketList[props.selectedTicket]}/>;
   }
+
   return (
     <div>
       <h2>Admin</h2>
@@ -24,7 +25,7 @@ Admin.propTypes = {
   ticketList: PropTypes.object,
   currentRouterPath: PropTypes.string.isRequired,
   onTicketSelection: PropTypes.func.isRequired,
-  selectedTicket: PropTypes.string
+  selectedTicket: PropTypes.string,
 };
 
 export default Admin;

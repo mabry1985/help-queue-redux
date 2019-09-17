@@ -6,17 +6,17 @@ import Error404 from './Error404';
 import { Switch, Route } from 'react-router-dom';
 import Moment from 'moment';
 import Admin from './Admin';
-import { v4 } from 'uuid';
+import { connect } from 'react-redux';
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       masterTicketList: {},
       selectedTicket: null
     };
-    this.handleAddingNewTicketToList = this.handleAddingNewTicketToList.bind(this);
     this.handleChangingSelectedTicket = this.handleChangingSelectedTicket.bind(this);
   }
 
@@ -39,27 +39,17 @@ class App extends React.Component {
     this.setState({masterTicketList: newMasterTicketList});
   }
 
-  handleAddingNewTicketToList(newTicket){
-    var newTicketId = v4()
-    var newMasterTicketList = Object.assign({}, this.state.masterTicketList, {
-      [newTicketId]: newTicket
-    });
-    newMasterTicketList[newTicketId].formattedWaitTime = newMasterTicketList[newTicketId].timeOpen.fromNow(true);
-    this.setState({masterTicketList: newMasterTicketList});
-  }
-
   handleChangingSelectedTicket(ticketId){
     this.setState({selectedTicket: ticketId});
   }
 
   render(){
-    console.log(this.state.masterTicketList);
     return (
       <div>
         <Header/>
         <Switch>
           <Route exact path='/' render={()=><TicketList ticketList={this.state.masterTicketList} />} />
-          <Route path='/newticket' render={()=><NewTicketControl onNewTicketCreation={this.handleAddingNewTicketToList} />} />
+          <Route path='/newticket' render={()=><NewTicketControl />} />
           <Route path='/admin' render={(props)=><Admin ticketList={this.state.masterTicketList} currentRouterPath={props.location.pathname}
             onTicketSelection={this.handleChangingSelectedTicket}
             selectedTicket={this.state.selectedTicket}/>} />
@@ -68,7 +58,12 @@ class App extends React.Component {
       </div>
     );
   }
-
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    masterTicketList: state
+  }
+}
+
+export default connect(mapStateToProps)(App);
