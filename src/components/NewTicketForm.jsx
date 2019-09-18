@@ -18,6 +18,7 @@ function NewTicketForm(props) {
       location: _location.value,
       issue: _issue.value,
       timeOpen: new Moment(),
+      formattedWaitTime: new Moment().fromNow(true),
     };
 
     _names.value = '';
